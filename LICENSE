@@ -1,7 +1,13 @@
 BSD 2-Clause License
 
-Copyright (c) 2019, rmcnew
+PySnafu, Copyright (c) 2019, Richard Scott McNew.
 All rights reserved.
+
+PySnafu is derived from:
+Wormy (a Nibbles clone)
+By Al Sweigart al@inventwithpython.com
+http://inventwithpython.com/pygame
+Released under a "Simplified BSD" license
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

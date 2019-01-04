@@ -1,25 +1,60 @@
+# PySnafu
+# Pygame-based Snafu based on Al Sweigart's wormy.py
+# 
+# BSD 2-Clause License
+# 
+# PySnafu, Copyright (c) 2019, Richard Scott McNew.
+# All rights reserved.
+# 
+# PySnafu is derived from:
 # Wormy (a Nibbles clone)
 # By Al Sweigart al@inventwithpython.com
 # http://inventwithpython.com/pygame
 # Released under a "Simplified BSD" license
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+# 
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import random, pygame, sys
+import random
+import pygame
+import sys
 from pygame.locals import *
 
 FPS = 15
-WINDOWWIDTH = 640
-WINDOWHEIGHT = 480
-CELLSIZE = 20
+WINDOWWIDTH = 1280
+WINDOWHEIGHT = 960
+CELLSIZE = 10
 assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
+PYSNAFU = 'PySnafu'
+SANS_FONT = 'freesansbold.ttf'
 
 #             R    G    B
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
 GREEN     = (  0, 255,   0)
+BLUE      = (  0,   0, 255)
 DARKGREEN = (  0, 155,   0)
 DARKGRAY  = ( 40,  40,  40)
 BGCOLOR = BLACK
@@ -29,7 +64,8 @@ DOWN = 'down'
 LEFT = 'left'
 RIGHT = 'right'
 
-HEAD = 0 # syntactic sugar: index of the worm's head
+HEAD = 0  # syntactic sugar: index of the worm's head
+
 
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT
@@ -37,8 +73,8 @@ def main():
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-    BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
-    pygame.display.set_caption('Wormy')
+    BASICFONT = pygame.font.Font(SANS_FONT, 18)
+    pygame.display.set_caption(PYSNAFU)
 
     showStartScreen()
     while True:
@@ -106,6 +142,7 @@ def runGame():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
+
 def drawPressKeyMsg():
     pressKeySurf = BASICFONT.render('Press a key to play.', True, DARKGRAY)
     pressKeyRect = pressKeySurf.get_rect()
@@ -126,9 +163,9 @@ def checkForKeyPress():
 
 
 def showStartScreen():
-    titleFont = pygame.font.Font('freesansbold.ttf', 100)
-    titleSurf1 = titleFont.render('Wormy!', True, WHITE, DARKGREEN)
-    titleSurf2 = titleFont.render('Wormy!', True, GREEN)
+    titleFont = pygame.font.Font(SANS_FONT, 100)
+    titleSurf1 = titleFont.render(PYSNAFU, True, WHITE, BLUE)
+    titleSurf2 = titleFont.render(PYSNAFU, True, RED)
 
     degrees1 = 0
     degrees2 = 0
@@ -151,8 +188,8 @@ def showStartScreen():
             return
         pygame.display.update()
         FPSCLOCK.tick(FPS)
-        degrees1 += 3 # rotate by 3 degrees each frame
-        degrees2 += 7 # rotate by 7 degrees each frame
+        degrees1 += 3  # rotate by 3 degrees each frame
+        degrees2 += 7  # rotate by 7 degrees each frame
 
 
 def terminate():
@@ -165,7 +202,7 @@ def getRandomLocation():
 
 
 def showGameOverScreen():
-    gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
+    gameOverFont = pygame.font.Font(SANS_FONT, 150)
     gameSurf = gameOverFont.render('Game', True, WHITE)
     overSurf = gameOverFont.render('Over', True, WHITE)
     gameRect = gameSurf.get_rect()
@@ -184,6 +221,7 @@ def showGameOverScreen():
         if checkForKeyPress():
             pygame.event.get() # clear event queue
             return
+
 
 def drawScore(score):
     scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE)
