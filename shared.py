@@ -76,6 +76,9 @@ HEAD = 0
 # maximum number of simultaneous apples
 APPLE_COUNT = 4
 
+# points for eating an apple
+APPLE_POINT_VALUE = 1
+
 
 def get_random_location():
     return {X: random.randint(0, GRID_WIDTH - 1), Y: random.randint(0, GRID_HEIGHT - 1)}

@@ -43,6 +43,7 @@ class Worm:
         self.fillColor = fill_color
         self.direction = start_direction
         self.coordinates = start_coordinates
+        self.apple_points = 0
 
     def died(self, other_worm):
         # did the worm hit the wall?
@@ -66,6 +67,7 @@ class Worm:
             if self.coordinates[HEAD][X] == apple[X] and self.coordinates[HEAD][Y] == apple[Y]:
                 # don't remove worm's tail segment
                 eaten = True
+                self.apple_points += APPLE_POINT_VALUE
                 new_apples.append(get_random_location())  # set a new apple somewhere
             else:
                 new_apples.append(apple)
@@ -83,6 +85,13 @@ class Worm:
             self.coordinates.insert(0, {X: self.coordinates[HEAD][X] - 1, Y: self.coordinates[HEAD][Y]})
         elif self.direction == RIGHT:
             self.coordinates.insert(0, {X: self.coordinates[HEAD][X] + 1, Y: self.coordinates[HEAD][Y]})
+
+    def length(self):
+        # get the length of the worm for scoring purposes
+        return len(self.coordinates)
+
+    def score(self):
+        return self.apple_points * int(self.length() / 3)
 
 
 

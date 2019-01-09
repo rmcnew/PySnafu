@@ -71,9 +71,9 @@ def init_worm2():
     start_x = random.randint((GRID_WIDTH/2) + 5, GRID_WIDTH - 6)
     start_y = random.randint(5, GRID_HEIGHT - 6)
     worm_coordinates = [{X: start_x, Y: start_y},
-                        {X: start_x + 1, Y: start_y},
-                        {X: start_x + 2, Y: start_y}]
-    direction = LEFT
+                        {X: start_x - 1, Y: start_y},
+                        {X: start_x - 2, Y: start_y}]
+    direction = RIGHT
     return Worm(Colors.DARK_GREEN, Colors.GREEN, direction, worm_coordinates)
 
 
@@ -109,6 +109,19 @@ def handle_input_events(worm1, worm2):
                 worm2.direction = UP
             elif (event.key == K_DOWN) and worm2.direction != UP:
                 worm2.direction = DOWN
+            # both worm controls
+            elif (event.key == K_KP4) and worm2.direction != RIGHT and worm1.direction != RIGHT:
+                worm2.direction = LEFT
+                worm1.direction = LEFT
+            elif (event.key == K_KP6) and worm2.direction != LEFT and worm1.direction != LEFT:
+                worm2.direction = RIGHT
+                worm1.direction = RIGHT
+            elif (event.key == K_KP8) and worm2.direction != DOWN and worm1.direction != DOWN:
+                worm2.direction = UP
+                worm1.direction = UP
+            elif (event.key == K_KP2) and worm2.direction != UP and worm1.direction != UP:
+                worm2.direction = DOWN
+                worm1.direction = DOWN
             # quit
             elif event.key == K_ESCAPE:
                 terminate()
@@ -142,7 +155,7 @@ def run_game():
         draw_worm(worm1)
         draw_worm(worm2)
         draw_apples(apples)
-        # draw_score(len(worm_coordinates) - 3)
+        draw_scores(worm1, worm2)
         pygame.display.update()
         FPS_CLOCK.tick(FPS)
 
@@ -223,11 +236,17 @@ def show_game_over_screen():
             return
 
 
-def draw_score(score):
-    score_surf = BASIC_FONT.render('Score: %s' % score, True, Colors.WHITE.value)
-    score_rect = score_surf.get_rect()
-    score_rect.topleft = (WINDOW_WIDTH - 120, 10)
-    DISPLAY_SURF.blit(score_surf, score_rect)
+def draw_scores(worm1, worm2):
+    # worm 1 score
+    worm1_score_surf = BASIC_FONT.render('Score: %s' % worm1.score(), True, Colors.WHITE.value)
+    worm1_score_rect = worm1_score_surf.get_rect()
+    worm1_score_rect.topleft = (120, 10)
+    DISPLAY_SURF.blit(worm1_score_surf, worm1_score_rect)
+    # worm 2 score
+    worm2_score_surf = BASIC_FONT.render('Score: %s' % worm2.score(), True, Colors.WHITE.value)
+    worm2_score_rect = worm2_score_surf.get_rect()
+    worm2_score_rect.topleft = (WINDOW_WIDTH - 120, 10)
+    DISPLAY_SURF.blit(worm2_score_surf, worm2_score_rect)
 
 
 def draw_worm(worm):
