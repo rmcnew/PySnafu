@@ -47,4 +47,5 @@ class Colors(Enum):
     DARK_GREEN = (0, 155, 0)
     DARK_BLUE = (0, 0, 155)
     DARK_GRAY = (40, 40, 40)
+    LIGHT_GRAY = (160, 160, 160)
     YELLOW = (155, 155, 0)

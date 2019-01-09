@@ -45,18 +45,22 @@ class Worm:
         self.coordinates = start_coordinates
         self.apple_points = 0
 
-    def died(self, other_worm):
+    def died(self, other_worm, stones):
         # did the worm hit the wall?
         if self.coordinates[HEAD][X] == -1 or self.coordinates[HEAD][X] == GRID_WIDTH or \
                 self.coordinates[HEAD][Y] == -1 or self.coordinates[HEAD][Y] == GRID_HEIGHT:
             return True
         # did the worm hit itself?
-        for wormBody in self.coordinates[1:]:
-            if wormBody[X] == self.coordinates[HEAD][X] and wormBody[Y] == self.coordinates[HEAD][Y]:
+        for worm_body in self.coordinates[1:]:
+            if worm_body[X] == self.coordinates[HEAD][X] and worm_body[Y] == self.coordinates[HEAD][Y]:
                 return True
         # did the worm hit the other worm?
-        for wormBody in other_worm.coordinates[1:]:
-            if wormBody[X] == self.coordinates[HEAD][X] and wormBody[Y] == self.coordinates[HEAD][Y]:
+        for worm_body in other_worm.coordinates[1:]:
+            if worm_body[X] == self.coordinates[HEAD][X] and worm_body[Y] == self.coordinates[HEAD][Y]:
+                return True
+        # did the worm hit a stone?
+        for stone in stones:
+            if self.coordinates[HEAD][X] == stone[X] and self.coordinates[HEAD][Y] == stone[Y]:
                 return True
         return False
 
@@ -93,6 +97,16 @@ class Worm:
     def score(self):
         return self.apple_points * int(self.length() / 3)
 
-
+    def was_hit_by_bolt(self, bolts, stones):
+        for bolt in bolts:
+            bolt_coords = bolt.get_moved_coords()
+            for bolt_segment in bolt_coords:
+                for worm_index in range(HEAD + 1, len(self.coordinates) - 1):
+                    if bolt_segment[X] == self.coordinates[worm_index][X] and bolt_segment[Y] == self.coordinates[worm_index][Y]:
+                        # bolt hit worm, the rest of the worm body turns to stone
+                        for hit_index in range(worm_index, len(self.coordinates) - 1):
+                            stones.append(self.coordinates[hit_index])
+                        del self.coordinates[worm_index:len(self.coordinates)]
+                        return
 
 

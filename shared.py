@@ -38,14 +38,14 @@ import random
 from colors import Colors
 
 # frames per second
-FPS = 15
+FPS = 12
 
 # game window
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 960
+WINDOW_WIDTH = 1920
+WINDOW_HEIGHT = 1440
 
 # cell size and game grid
-CELL_SIZE = 10
+CELL_SIZE = 15
 assert WINDOW_WIDTH % CELL_SIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOW_HEIGHT % CELL_SIZE == 0, "Window height must be a multiple of cell size."
 GRID_WIDTH = int(WINDOW_WIDTH / CELL_SIZE)
@@ -74,7 +74,7 @@ RIGHT = 'right'
 HEAD = 0
 
 # maximum number of simultaneous apples
-APPLE_COUNT = 4
+APPLE_COUNT = 16
 
 # points for eating an apple
 APPLE_POINT_VALUE = 1

@@ -1,0 +1,47 @@
+PySnafu was developed using Python 3.6.4 on Linux.
+
+It should be able to run under on other platforms that support Python 3, but it has not been tested exhaustively.
+
+These instructions assume that you have little to no Python background, but should enable you to get PySnafu running.
+
+1.  Install Python 3 on your platform.
+
+At the time of this writing, Python 3.6.4 is the latest version of Python.
+If you are using Linux or macOS, there's a good chance that you might have Python already installed.  Open a terminal
+and try running "python3 --version".  If you are on another platform, point your web browser to https://www.python.org,
+download the latest release for your platform and follow the installation instructions for your platform.
+
+2.  Install virtualenv.
+
+virtualenv is a localized Python package management system that allows Python packages to be installed locally for
+Python projects.    Follow the virtualenv installation instructions at
+https://packaging.python.org/guides/installing-using-pip-and-virtualenv/
+
+3.  Create a virtualenv environment
+
+In the PySnafu directory, run the following command:
+
+python3 -m venv .venv
+
+This will create an empty virtualenv environment in the ".venv" directory.  This allows PySnafu requirements to be
+installed locally.
+
+4.  Activate the virtualenv environment
+
+In the PySnafu directory, run the following command:
+
+source .venv/bin/activate
+
+This should prepend "(.venv)" to your shell prompt, letting you know that you are in the virtualenv.
+
+5.  Install PySnafu Python requirements
+
+While inside the virtualenv and in the PySnafu directory, run the following command:
+
+pip install -r requirements.txt
+
+This will install the Python packages needed to run PySnafu in the virtualenv.
+
+6.  Run the program
+
+python3 pysnafu.py

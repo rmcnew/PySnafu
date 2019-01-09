@@ -52,8 +52,8 @@ def main():
     pygame.display.set_caption(PYSNAFU)
     show_start_screen()
     while True:
-        run_game()
-        show_game_over_screen()
+        winner = run_game()
+        show_game_over_screen(winner)
 
 
 def init_worm1():
@@ -154,10 +154,10 @@ def run_game():
         handle_input_events(worm1, worm2, bolts)
 
         # check for collisions
-        if worm1.died(worm2):
-            return "Worm 2 wins!"
-        if worm2.died(worm1):
-            return "Worm 1 wins!"
+        if worm1.died(worm2, stones):
+            return "Green Worm"
+        if worm2.died(worm1, stones):
+            return "Blue Worm"
 
         # check if worm has eaten an apple
         apples = worm1.ate_apple(apples)
@@ -170,6 +170,10 @@ def run_game():
         worm1.move()
         worm2.move()
 
+        # check for worms hit by bolts
+        worm1.was_hit_by_bolt(bolts, stones)
+        worm2.was_hit_by_bolt(bolts, stones)
+
         # update display
         DISPLAY_SURF.fill(BG_COLOR.value)
         draw_grid()
@@ -177,6 +181,7 @@ def run_game():
         draw_worm(worm2)
         draw_bolts(bolts)
         draw_apples(apples)
+        draw_stones(stones)
         draw_scores(worm1, worm2)
         pygame.display.update()
         FPS_CLOCK.tick(FPS)
@@ -236,10 +241,10 @@ def terminate():
     sys.exit()
 
 
-def show_game_over_screen():
+def show_game_over_screen(winner):
     game_over_font = pygame.font.Font(SANS_FONT, 150)
-    game_surf = game_over_font.render('Game', True, Colors.WHITE.value)
-    over_surf = game_over_font.render('Over', True, Colors.WHITE.value)
+    game_surf = game_over_font.render(winner, True, Colors.WHITE.value)
+    over_surf = game_over_font.render('Wins!', True, Colors.WHITE.value)
     game_rect = game_surf.get_rect()
     over_rect = over_surf.get_rect()
     game_rect.midtop = (WINDOW_WIDTH / 2, 10)
@@ -287,6 +292,14 @@ def draw_apples(apples):
         y = apple[Y] * CELL_SIZE
         apple_rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
         pygame.draw.rect(DISPLAY_SURF, Colors.RED.value, apple_rect)
+
+def draw_stones(stones):
+    for stone in stones:
+        x = stone[X] * CELL_SIZE
+        y = stone[Y] * CELL_SIZE
+        stone_rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
+        pygame.draw.rect(DISPLAY_SURF, Colors.LIGHT_GRAY.value, stone_rect)
+
 
 def draw_bolts(bolts):
     for bolt in bolts:
