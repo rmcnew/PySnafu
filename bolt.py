@@ -61,12 +61,12 @@ class Bolt:
             for y in range(self.coordinates[Y], self.coordinates[Y] + BOLT_SPEED):
                 bolt_coords.append({X: self.coordinates[X], Y: y})
         elif self.direction == DOWN:
-            for y in range(self.coordinates[Y], self.coordinates[Y] - BOLT_SPEED):
+            for y in range(self.coordinates[Y] - BOLT_SPEED, self.coordinates[Y]):
                 bolt_coords.append({X: self.coordinates[X], Y: y})
         elif self.direction == LEFT:
             for x in range(self.coordinates[X], self.coordinates[X] + BOLT_SPEED):
                 bolt_coords.append({X: x, Y: self.coordinates[Y]})
         elif self.direction == RIGHT:
-            for x in range(self.coordinates[X], self.coordinates[X] - BOLT_SPEED):
+            for x in range(self.coordinates[X] - BOLT_SPEED, self.coordinates[X]):
                 bolt_coords.append({X: x, Y: self.coordinates[Y]})
         return bolt_coords
