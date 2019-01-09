@@ -33,18 +33,22 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Color palette definitions
-from enum import Enum
+# bolt class
+from shared import *
 
 
-class Colors(Enum):
-    # R    G    B
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    BLUE = (0, 0, 255)
-    DARK_GREEN = (0, 155, 0)
-    DARK_BLUE = (0, 0, 155)
-    DARK_GRAY = (40, 40, 40)
-    YELLOW = (155, 155, 0)
+class Bolt:
+    def __init__(self, direction, start_coordinates):
+        self.direction = direction
+        self.coordinates = start_coordinates
+
+    def move(self):
+        # move the bolt
+        if self.direction == UP:
+            self.coordinates = {X: self.coordinates[X], Y: self.coordinates[Y] - BOLT_SPEED}
+        elif self.direction == DOWN:
+            self.coordinates = {X: self.coordinates[X], Y: self.coordinates[Y] + BOLT_SPEED}
+        elif self.direction == LEFT:
+            self.coordinates = {X: self.coordinates[X] - BOLT_SPEED, Y: self.coordinates[Y]}
+        elif self.direction == RIGHT:
+            self.coordinates = {X: self.coordinates[X] + BOLT_SPEED, Y: self.coordinates[Y]}

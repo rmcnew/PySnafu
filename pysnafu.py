@@ -40,6 +40,7 @@ from pygame.locals import *
 
 from shared import *
 from worm import Worm
+from bolt import Bolt
 
 
 def main():
@@ -85,7 +86,18 @@ def init_apples():
     return apples
 
 
-def handle_input_events(worm1, worm2):
+def fire_bolt(worm, bolts):
+    if worm.direction == UP:
+        bolts.append(Bolt(UP, {X: worm.coordinates[HEAD][X], Y: worm.coordinates[HEAD][Y] - 1}))
+    elif worm.direction == DOWN:
+        bolts.append(Bolt(DOWN, {X: worm.coordinates[HEAD][X], Y: worm.coordinates[HEAD][Y] + 1}))
+    elif worm.direction == LEFT:
+        bolts.append(Bolt(LEFT, {X: worm.coordinates[HEAD][X] - 1, Y: worm.coordinates[HEAD][Y]}))
+    elif worm.direction == RIGHT:
+        bolts.append(Bolt(RIGHT, {X: worm.coordinates[HEAD][X] + 1, Y: worm.coordinates[HEAD][Y]}))
+
+
+def handle_input_events(worm1, worm2, bolts):
     # handle input events
     for event in pygame.event.get():  # event handling loop
         if event.type == QUIT:
@@ -100,6 +112,8 @@ def handle_input_events(worm1, worm2):
                 worm1.direction = UP
             elif (event.key == K_s) and worm1.direction != UP:
                 worm1.direction = DOWN
+            elif event.key == K_LCTRL:
+                fire_bolt(worm1, bolts)
             # worm 2 controls
             elif (event.key == K_LEFT) and worm2.direction != RIGHT:
                 worm2.direction = LEFT
@@ -109,6 +123,8 @@ def handle_input_events(worm1, worm2):
                 worm2.direction = UP
             elif (event.key == K_DOWN) and worm2.direction != UP:
                 worm2.direction = DOWN
+            elif event.key == K_RCTRL:
+                fire_bolt(worm2, bolts)
             # both worm controls
             elif (event.key == K_KP4) and worm2.direction != RIGHT and worm1.direction != RIGHT:
                 worm2.direction = LEFT
@@ -131,9 +147,11 @@ def run_game():
     worm1 = init_worm1()  # WASD controls
     worm2 = init_worm2()  # arrow controls
     apples = init_apples()
+    stones = []
+    bolts = []
 
     while True:  # main game loop
-        handle_input_events(worm1, worm2)
+        handle_input_events(worm1, worm2, bolts)
 
         # check for collisions
         if worm1.died(worm2):
@@ -145,6 +163,9 @@ def run_game():
         apples = worm1.ate_apple(apples)
         apples = worm2.ate_apple(apples)
 
+        # move bolts
+        for bolt in bolts:
+            bolt.move()
         # move worms
         worm1.move()
         worm2.move()
@@ -154,6 +175,7 @@ def run_game():
         draw_grid()
         draw_worm(worm1)
         draw_worm(worm2)
+        draw_bolts(bolts)
         draw_apples(apples)
         draw_scores(worm1, worm2)
         pygame.display.update()
@@ -266,6 +288,12 @@ def draw_apples(apples):
         apple_rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
         pygame.draw.rect(DISPLAY_SURF, Colors.RED.value, apple_rect)
 
+def draw_bolts(bolts):
+    for bolt in bolts:
+        x = bolt.coordinates[X] * CELL_SIZE
+        y = bolt.coordinates[Y] * CELL_SIZE
+        bolt_rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
+        pygame.draw.rect(DISPLAY_SURF, Colors.YELLOW.value, bolt_rect)
 
 def draw_grid():
     for x in range(0, WINDOW_WIDTH, CELL_SIZE):  # draw vertical lines
